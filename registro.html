@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear Cuenta - GameZone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px; /* un poquito más ancho para más campos */
+      background: rgba(20, 25, 40, 0.88);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      border: 1px solid rgba(33, 150, 243, 0.25);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(90deg, #ffcc00, #ff9800);
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.1rem;
+      margin-bottom: 8px;
+      color: #0d1b2a;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      color: rgba(13, 27, 42, 0.9);
+      font-size: 1rem;
+    }
+
+    .form-container {
+      padding: 32px 28px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 16px 14px 48px;
+      border: 1px solid rgba(33, 150, 243, 0.4);
+      border-radius: 10px;
+      background: rgba(30, 40, 60, 0.7);
+      color: #ffffff;
+      font-size: 1rem;
+      transition: all 0.25s;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #ffcc00;
+      box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.3);
+      background: rgba(40, 50, 70, 0.9);
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #90caf9;
+      font-size: 1.2rem;
+    }
+
+    .btn-register {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg, #ffcc00, #ffb300);
+      color: #0d1b2a;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(255, 204, 0, 0.5);
+      margin-top: 12px;
+    }
+
+    .btn-register:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 204, 0, 0.6);
+      background: linear-gradient(90deg, #ffdd33, #ffc107);
+    }
+
+    .signup-link {
+      text-align: center;
+      margin-top: 24px;
+      color: #90caf9;
+      font-size: 0.95rem;
+    }
+
+    .signup-link a {
+      color: #ffcc00;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .signup-link a:hover {
+      color: #ffe082;
+      text-decoration: underline;
+    }
+
+    .terms {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .terms a {
+      color: #64b5f6;
+      text-decoration: none;
+    }
+
+    .terms a:hover {
+      color: #bbdefb;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>GameZone</h1>
+      <p>Únete y empieza a jugar hoy</p>
+    </div>
+
+    <div class="form-container">
+      <form>
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="Nombre de usuario" required>
+        </div>
+
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" placeholder="Correo electrónico" required>
+        </div>
+
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" placeholder="Contraseña" required>
+        </div>
+
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" placeholder="Confirmar contraseña" required>
+        </div>
+
+        <button type="submit" class="btn-register">Crear Cuenta</button>
+      </form>
+
+      <div class="terms">
+        Al registrarte aceptas nuestros <a href="#">Términos de servicio</a> y <a href="#">Política de privacidad</a>
+      </div>
+
+      <div class="signup-link">
+        ¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const form = document.querySelector('form');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const username = document.querySelector('input[placeholder="Nombre de usuario"]').value.trim();
+    const email = document.querySelector('input[type="email"]').value.trim();
+    const password = document.querySelector('input[placeholder="Contraseña"]').value;
+    const confirmPassword = document.querySelector('input[placeholder="Confirmar contraseña"]').value;
+
+    if (password !== confirmPassword) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+
+    if (!username || !email || !password) {
+      alert('Completa todos los campos');
+      return;
+    }
+
+    const newUser = {
+      username,
+      email,
+      password,  // En producción NUNCA guardes contraseña plana (usa hash)
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUser)
+      });
+
+      if (response.ok) {
+        alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
+        window.location.href = 'login.html'; // o index.html
+      } else {
+        alert('Error al registrar. Intenta de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('No se pudo conectar al servidor. Asegúrate de que json-server esté corriendo.');
+    }
+  });
+</script>
+  
+</body>
+</html>

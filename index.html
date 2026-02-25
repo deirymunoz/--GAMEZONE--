@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GameZone - Tu Tienda de Videojuegos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+
+    /* Header / Nav */
+    header {
+      background: rgba(13, 27, 42, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 15px 5%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(33, 150, 243, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #ffcc00;
+      text-shadow: 0 0 10px rgba(255,204,0,0.5);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    nav a {
+      color: #bbdefb;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover { color: #ffcc00; }
+
+    .user-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-welcome {
+      color: #ffcc00;
+      font-weight: bold;
+      font-size: 1.05rem;
+    }
+
+    .logout-btn {
+      color: #ff6b6b;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .logout-btn:hover {
+      color: #ff8787;
+    }
+
+    /* Mini-player de música fijo abajo derecha */
+    #musicPlayer {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(20, 25, 40, 0.92);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 12px 20px;
+      border: 1px solid rgba(255,204,0,0.25);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 999;
+      max-width: 380px;
+      transition: all 0.3s;
+    }
+
+    #musicPlayer:hover {
+      transform: scale(1.03);
+    }
+
+    .sound-btn {
+      background: rgba(255,204,0,0.2);
+      border: 1px solid #ffcc00;
+      color: #ffcc00;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .sound-btn:hover {
+      background: rgba(255,204,0,0.4);
+      transform: scale(1.1);
+    }
+
+    #currentTrack {
+      color: #ffcc00;
+      font-size: 0.92rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
+    }
+
+    /* Resto de tu CSS (carrusel, categorías, responsive) queda igual */
+    .carousel { height: 100vh; position: relative; overflow: hidden; }
+    .slides { display: flex; width: 400%; height: 100%; transition: transform 0.8s ease; }
+    .slide { width: 25%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center; color: white; text-shadow: 0 4px 12px black; }
+    .slide-content { max-width: 700px; padding: 30px; }
+    .slide h2 { font-size: 3.5rem; margin-bottom: 15px; color: #ffcc00; }
+    .slide p { font-size: 1.4rem; margin-bottom: 25px; }
+    .btn-shop { background: #ffcc00; color: #0d1b2a; padding: 14px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 20px rgba(255,204,0,0.5); transition: all 0.3s; }
+    .btn-shop:hover { transform: scale(1.08); box-shadow: 0 10px 30px rgba(255,204,0,0.7); }
+
+    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(13,27,42,0.6); backdrop-filter: blur(5px); color: #ffcc00; border: none; font-size: 2.5rem; width: 60px; height: 60px; border-radius: 50%; cursor: pointer; transition: all 0.3s; z-index: 10; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
+    .carousel-btn:hover { background: rgba(255,204,0,0.3); opacity: 1; transform: translateY(-50%) scale(1.15); box-shadow: 0 0 20px rgba(255,204,0,0.5); }
+    .prev { left: 20px; }
+    .next { right: 20px; }
+
+    .categories { padding: 80px 5% 100px; text-align: center; }
+    .categories h2 { font-size: 2.8rem; color: #ffcc00; margin-bottom: 50px; text-shadow: 0 0 15px rgba(255,204,0,0.4); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1400px; margin: 0 auto; }
+    .card { background: rgba(20,25,40,0.88); backdrop-filter: blur(10px); border-radius: 16px; border: 1px solid rgba(33,150,243,0.25); overflow: hidden; transition: all 0.3s; cursor: pointer; }
+    .card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(255,204,0,0.3); }
+    .card img { width: 100%; height: 180px; object-fit: cover; }
+    .card h3 { padding: 20px; font-size: 1.4rem; color: #ffcc00; }
+    .card p { padding: 0 20px 25px; color: #bbdefb; }
+
+    @media (max-width: 768px) {
+      header { flex-direction: column; padding: 10px 5%; gap: 10px; text-align: center; }
+      nav { margin: 10px 0; flex-wrap: wrap; justify-content: center; gap: 15px; }
+      nav a { margin: 5px 10px; font-size: 0.95rem; }
+      .logo { font-size: 1.6rem; }
+      .carousel { height: 70vh; }
+      .slide h2 { font-size: 2.2rem; }
+      .slide p { font-size: 1.1rem; }
+      .btn-shop { padding: 10px 20px; font-size: 0.95rem; }
+      .slide-content { padding: 20px; max-width: 90%; }
+      .categories { padding: 60px 5% 80px; }
+      .categories h2 { font-size: 2.2rem; }
+      .card h3 { font-size: 1.2rem; padding: 15px; }
+      .card p { padding: 0 15px 20px; font-size: 0.95rem; }
+      .card img { height: 160px; }
+      .carousel-btn { width: 50px; height: 50px; font-size: 2rem; }
+      .prev { left: 10px; }
+      .next { right: 10px; }
+      #musicPlayer { bottom: 15px; right: 15px; padding: 10px 15px; max-width: 320px; gap: 10px; }
+      #currentTrack { max-width: 140px; font-size: 0.85rem; }
+    }
+
+    html, body { overflow-x: hidden; }
+    button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  </style>
+</head>
+<body>
+
+  <!-- Audio -->
+  <audio id="bgMusic"></audio>
+
+  <header>
+    <div class="logo">GameZone</div>
+    
+    <nav>
+      <a href="#">Inicio</a>
+      <a href="#">Tienda</a>
+      <a href="#">Ofertas</a>
+      <a id="authLink" href="login.html">Iniciar Sesión</a>
+    </nav>
+  </header>
+
+  <!-- Mini-player de música fijo abajo derecha -->
+  <div id="musicPlayer">
+    <button class="sound-btn" id="soundToggle"><i class="fas fa-volume-mute"></i></button>
+    <button class="sound-btn" id="nextTrack"><i class="fas fa-forward"></i></button>
+    <span id="currentTrack">Canción: --</span>
+  </div>
+
+  <!-- Carrusel con flechas -->
+  <section class="carousel">
+    <div class="slides" id="slides">
+      <div class="slide" style="background-image: url('https://fotografias-neox.atresmedia.com/clipping/cmsimages02/2019/06/09/49DD0081-A481-4EA0-A5F7-5A94C6F65CFB/98.jpg?crop=1920,1080,x0,y0&width=1900&height=1069&optimize=high&format=webply');">
+        <div class="slide-content">
+          <h2>Cyberpunk 2077</h2>
+          <p>La edición definitiva ya disponible</p>
+          <a href="#" class="btn-shop">Comprar Ahora</a>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('https://gmedia.playstation.com/is/image/SIEPDC/Elden-Ring-Shadow-of-the-Erdtree-background-desktop-01-en-01mar24?$2400px$');">
+        <div class="slide-content">
+          <h2>Elden Ring Shadow of the Erdtree</h2>
+          <p>La expansión más esperada del año</p>
+          <a href="#" class="btn-shop">Ver Detalles</a>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('https://assets-prd.ignimgs.com/2024/08/18/blackmyth-1723969364570.jpg?crop=1%3A1%2Csmart&format=jpg&auto=webp&quality=80');">
+        <div class="slide-content">
+          <h2>Black Myth: Wukong</h2>
+          <p>Acción mitológica épica</p>
+          <a href="#" class="btn-shop">Comprar</a>
+        </div>
+      </div>
+      <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1607853202273-797f0c0a9e09?w=1400');">
+        <div class="slide-content">
+          <h2>Ofertas de la Semana</h2>
+          <p>Hasta 70% OFF en +200 juegos</p>
+          <a href="#" class="btn-shop">Ver Ofertas</a>
+        </div>
+      </div>
+    </div>
+
+    <button class="carousel-btn prev" id="prevSlide"><i class="fas fa-chevron-left"></i></button>
+    <button class="carousel-btn next" id="nextSlide"><i class="fas fa-chevron-right"></i></button>
+  </section>
+
+  <!-- Categorías -->
+  <section class="categories">
+    <h2>Explora por Géneros</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="https://img.asmedia.epimg.net/resizer/v2/DYPTAUPZDNJR3O676MEYQHYJPE.jpg?auth=13737dbad0133aa6b9bb6a261b3d295c9325a691cb93020a00cc70b27a4623a7&width=1952&height=1098&smart=true" alt="Acción">
+        <h3>Acción / Aventura</h3>
+        <p>Juegos intensos, historias épicas y combates brutales</p>
+      </div>
+      <div class="card">
+        <img src="https://fotografias-2.larazon.es/assets/videojuegos/2021/05/diablo-iii.jpg?width=1900&height=1069" alt="RPG">
+        <h3>RPG</h3>
+        <p>Mundos abiertos, progresión profunda y decisiones que importan</p>
+      </div>
+      <div class="card">
+        <img src="https://sm.ign.com/t/ign_es/screenshot/default/borderlands-3-uhdpaper_xjdz.1280.jpg" alt="Shooter">
+        <h3>Shooter</h3>
+        <p>Disparos precisos, multijugador competitivo y campañas explosivas</p>
+      </div>
+      <div class="card">
+        <img src="https://plarium.com/wp-content/uploads/sites/7/2022/01/indie-games.webp" alt="Indie">
+        <h3>Indie / Retro</h3>
+        <p>Joyas independientes, pixel art y experiencias únicas</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const playlist = [
+      "Steampianist with Tsus - La Llorona - Feat. Vocaloid Maika, Oliver and Gumi.mp3",
+      "K-391 - Summertime [Sunshine] - K-391.mp3",
+      "Bingo Players - Rattle (Radio Edit).mp3",
+      "R4BBIT - Make it drop.mp3",
+      "CS GO BHOP THEME.mp3"
+    ];
+
+    let currentTrackIndex = 0;
+    const music = document.getElementById('bgMusic');
+    const toggleBtn = document.getElementById('soundToggle');
+    const nextTrackBtn = document.getElementById('nextTrack');
+    const currentTrackSpan = document.getElementById('currentTrack');
+
+    function loadAndPlayTrack() {
+      music.src = playlist[currentTrackIndex];
+      music.load();
+      music.play().catch(err => console.log("Error al reproducir:", err));
+
+      const trackName = playlist[currentTrackIndex]
+        .replace('.mp3', '')
+        .replace(/-/g, ' → ')
+        .replace(/Feat\./gi, 'Feat ')
+        .replace(/\[.*?\]/g, '')
+        .trim();
+
+      currentTrackSpan.textContent = `Canción: ${trackName}`;
+    }
+
+    music.addEventListener('ended', () => {
+      currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+      loadAndPlayTrack();
+    });
+
+    toggleBtn.addEventListener('click', () => {
+      if (music.paused) {
+        if (!music.src || music.ended) loadAndPlayTrack();
+        else music.play().catch(() => {});
+        toggleBtn.innerHTML = '<i class="fas fa-volume-up"></i> ON';
+      } else {
+        music.pause();
+        toggleBtn.innerHTML = '<i class="fas fa-volume-mute"></i> OFF';
+      }
+    });
+
+    nextTrackBtn.addEventListener('click', () => {
+      currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+      loadAndPlayTrack();
+    });
+
+    // Carrusel
+    let currentSlide = 0;
+    const slides = document.getElementById('slides');
+    const totalSlides = 4;
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      slides.style.transform = `translateX(-${currentSlide * 25}%)`;
+    }
+
+    document.getElementById('nextSlide').addEventListener('click', nextSlide);
+    document.getElementById('prevSlide').addEventListener('click', () => {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      slides.style.transform = `translateX(-${currentSlide * 25}%)`;
+    });
+
+    setInterval(nextSlide, 6000);
+
+    // Sesión de usuario (arriba derecha como Facebook)
+    const loggedUser = localStorage.getItem('loggedUser');
+    const authLink = document.getElementById('authLink');
+
+    if (loggedUser) {
+      const user = JSON.parse(loggedUser);
+
+      // Cambia "Iniciar Sesión" por "Bienvenido, [nombre]"
+      if (authLink) {
+        authLink.textContent = `Bienvenido, ${user.username}`;
+        authLink.href = "#";
+        authLink.style.color = "#ffcc00";
+        authLink.style.fontWeight = "bold";
+      }
+
+      // Agrega botón "Cerrar sesión" al lado
+      const nav = document.querySelector('nav');
+      const logoutLink = document.createElement('a');
+      logoutLink.href = "#";
+      logoutLink.textContent = "Cerrar sesión";
+      logoutLink.style.marginLeft = "20px";
+      logoutLink.style.color = "#ff6b6b";
+      logoutLink.style.textDecoration = "none";
+      logoutLink.style.fontWeight = "500";
+      logoutLink.style.cursor = "pointer";
+      logoutLink.onclick = () => {
+        localStorage.removeItem('loggedUser');
+        alert("Sesión cerrada");
+        window.location.reload();
+      };
+      nav.appendChild(logoutLink);
+    } else {
+      if (authLink) {
+        authLink.textContent = "Iniciar Sesión";
+        authLink.href = "login.html";
+      }
+    }
+  </script>
+
+</body>
+</html>
